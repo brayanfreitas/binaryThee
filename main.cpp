@@ -34,6 +34,29 @@ void insert(Three &a, char element)
   }
 }
 
+void showElements(Three &a)
+{
+  if (a != NULL)
+  {
+    showElements(a->left);
+    cout << a->value << "  ";
+    showElements(a->right);
+  }
+}
+
+void showThree(Three &a, int init)
+
+{
+  if (a)
+  {
+    showThree(a->right, init + 1);
+    for (int i = 0; i < init; i++)
+      cout << "   ";
+    cout << a->value << endl;
+    showThree(a->left, init + 1);
+  }
+}
+
 void inicialize(Three &a)
 {
   a = NULL;
@@ -41,5 +64,16 @@ void inicialize(Three &a)
 
 int main(void)
 {
+  Three a = new Data;
+  inicialize(a);
+
+  insert(a, 'c');
+  insert(a, 'i');
+  insert(a, 'h');
+  insert(a, 'p');
+  insert(a, 'o');
+  showThree(a, 0);
+  showElements(a);
+
   return 0;
 }
