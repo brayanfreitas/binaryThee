@@ -110,7 +110,7 @@ void findAndDeleteElement(Three &a, char element)
       node = node->right;
     }
   }
-  if (node != NULL && a->value == element)
+  if (node != NULL && node->value == element)
   {
     if (node == a)
     {
@@ -135,6 +135,14 @@ void findAndDeleteElement(Three &a, char element)
   }
 }
 
+int countNode(Three a)
+{
+
+  if (a == NULL)
+    return 0;
+  return (1 + countNode(a->left) + countNode(a->right));
+}
+
 int main(void)
 {
   Three a = new Data;
@@ -145,9 +153,10 @@ int main(void)
   insert(a, 'h');
   insert(a, 'p');
   insert(a, 'o');
-  showThree(a, 0);
   showElements(a);
-  findAndDeleteElement(a, 'c');
+
+  findAndDeleteElement(a, 'h');
+
   showElements(a);
 
   return 0;
