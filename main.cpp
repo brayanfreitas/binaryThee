@@ -61,6 +61,79 @@ void inicialize(Three &a)
 {
   a = NULL;
 }
+void deleteElement(Three &a)
+{
+  Three aux = new Data;
+  if (a != NULL)
+  {
+    if (!a->right)
+    {
+      a = a->left;
+    }
+    else if (!a->left)
+    {
+      a = a->right;
+    }
+    else
+    {
+      aux = a->left;
+      while (aux->right != NULL)
+      {
+        aux = aux->right;
+      }
+      aux->right = a->right;
+
+      aux = a;
+      a = a->left;
+    }
+    delete aux;
+  }
+}
+
+void findAndDeleteElement(Three &a, char element)
+{
+  Three node = a;
+  Three prev = new Data;
+  while (node != NULL)
+  {
+    if (node->value == element)
+    {
+      break;
+    }
+    prev = node;
+    if (element < node->value)
+    {
+      node = node->left;
+    }
+    else
+    {
+      node = node->right;
+    }
+  }
+  if (node != NULL && a->value == element)
+  {
+    if (node == a)
+    {
+      deleteElement(a);
+    }
+    else if (prev->left == node)
+    {
+      deleteElement(prev->left);
+    }
+    else
+    {
+      deleteElement(prev->right);
+    }
+  }
+  else if (a != NULL)
+  {
+    cout << "Element " << element << "is not in the three";
+  }
+  else
+  {
+    cout << "Three is empty";
+  }
+}
 
 int main(void)
 {
@@ -73,6 +146,8 @@ int main(void)
   insert(a, 'p');
   insert(a, 'o');
   showThree(a, 0);
+  showElements(a);
+  findAndDeleteElement(a, 'c');
   showElements(a);
 
   return 0;
