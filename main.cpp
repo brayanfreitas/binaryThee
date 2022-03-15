@@ -143,21 +143,120 @@ int countNode(Three a)
   return (1 + countNode(a->left) + countNode(a->right));
 }
 
+Three rotateThreeRight(Three grandFather)
+{
+  Three parent;
+  Three child;
+
+  if ((grandFather == NULL) || (grandFather->left == NULL))
+  {
+    return grandFather;
+  }
+
+  parent = grandFather->left;
+  child = parent->right;
+  parent->right = grandFather;
+  grandFather->left = child;
+  return parent;
+}
+
+Three makeBackBone(Three grandParent)
+{
+  Three p, r;
+  r = new Data;
+  r->left = NULL;
+  r->right = grandParent;
+  p = r;
+
+  while (p->right)
+  {
+    if (p->right->left == NULL)
+    {
+      p = p->right;
+    }
+    else
+    {
+      p->right = rotateThreeRight(p->right);
+    }
+  }
+  return r;
+}
+
+Three rotateThreeLeft(Three grandParent)
+{
+  Three parent, child;
+
+  if ((grandParent == NULL) || (grandParent->right == NULL))
+  {
+    return grandParent;
+  }
+  parent = grandParent->right;
+  child = parent->left;
+  parent->left = grandParent;
+  grandParent->right = child;
+  return parent;
+}
+
+Three rotate(Three grandParent, int count)
+{
+  Three p;
+
+  p = grandParent;
+  while (count)
+  {
+    p->right = rotateThreeLeft(p->right);
+    p = p->right;
+    --count;
+  }
+  return grandParent;
+}
+
+Three rebalance(Three a)
+{
+  int n, t, l, lc;
+  n = countNode(a);
+
+  // log2(n+1)
+  t = n + 1;
+  l = 0;
+  while (t > 1)
+  {
+    ++l;
+    t /= 2;
+  }
+
+  lc = n + 1 - (1 << l);
+  if (lc == 0)
+    lc = (1 << (l - 1));
+  a = rotate(a, lc);
+
+  n -= lc;
+  while (n > 1)
+  {
+    n /= 2;
+    a = rotate(a, n);
+  }
+
+  return a;
+}
+
 int main(void)
 {
   Three a = new Data;
   inicialize(a);
 
-  insert(a, 'c');
-  insert(a, 'i');
-  insert(a, 'h');
-  insert(a, 'p');
-  insert(a, 'o');
-  showElements(a);
+  insert(a, 'f');
+  insert(a, 'g');
+  insert(a, 'l');
+  insert(a, 't');
+  insert(a, 'u');
 
-  findAndDeleteElement(a, 'h');
+  a = makeBackBone(a);
+  showThree(a, 0);
+  a = rebalance(a);
+  showThree(a, 0);
 
-  showElements(a);
+  // indAndDeleteElement(a, 'h');
 
   return 0;
 }
